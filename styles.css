@@ -1,0 +1,277 @@
+/* Токены из Figma (дизайн-система AdGuard, Material 3) */
+:root {
+  --bg: #ffffff;
+  --error: #f53434;
+  --success: #019f3c;
+  --accent: #315aef;
+  --accent-disabled: rgba(75, 111, 241, 0.5);
+  --text: #374353;        /* neutral/black/default */
+  --text-sec: #5d7089;    /* neutral/dark/default */
+  --text-contrast: #35383b;
+  --divider: rgba(39, 47, 58, 0.1);
+  --border: #eaeff2;
+  --radius-s: 8px;
+  --radius-l: 16px;
+  --font-tight: "Inter Tight", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --phone-w: 360px;
+  --phone-h: 800px;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  display: grid;
+  place-items: center;
+  background: #f2f4f7;
+  font-family: var(--font-tight);
+  color: var(--text);
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* «Телефон»: обёртка 360×800, внутри — макет 1:1.
+   На маленьких вьюпортах целиком сжимается через --s (ставится из JS). */
+.phone {
+  --s: 1;
+  position: relative;
+  width: var(--phone-w);
+  height: var(--phone-h);
+  background: var(--bg);
+  border-radius: 24px;
+  box-shadow: 0 12px 40px rgba(39, 47, 58, 0.18);
+  overflow: hidden;
+  transform: scale(var(--s));
+  transform-origin: center;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+
+[hidden] { display: none !important; }
+
+/* iMobile status bar */
+.status-bar {
+  display: block;
+  width: 100%;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+/* Top App Bar */
+.app-bar {
+  display: flex;
+  align-items: center;
+  min-height: 64px;
+  padding: 24px 16px 8px;
+  flex-shrink: 0;
+}
+
+.app-bar--empty { min-height: 40px; padding: 12px 16px 8px; }
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 4px;
+  border: 0;
+  border-radius: var(--radius-s);
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Заголовок экрана */
+.page-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 16px;
+  flex-shrink: 0;
+}
+
+.screen-title {
+  margin: 0;
+  font-family: var(--font-tight);
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.4;
+  overflow-wrap: break-word;
+}
+
+.screen-title--error { color: var(--error); }
+.screen-title--ok { color: var(--success); }
+
+.screen-sub {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Подпись секции */
+.section-label {
+  margin: 0;
+  padding: 24px 16px 8px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-sec);
+  flex-shrink: 0;
+}
+
+/* Строка чатбота */
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 16px;
+  border: 0;
+  background: var(--bg);
+  font-family: var(--font-body);
+  text-align: left;
+}
+
+.row--lined { border-top: 1px solid var(--divider); }
+
+.row--tap { cursor: pointer; padding-top: 8px; }
+
+.row-texts {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 0 0;
+  min-width: 0;
+}
+
+.row-title {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.row-sub {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.row-icon { flex-shrink: 0; padding-top: 2px; }
+
+.row-trash { margin-left: 4px; padding-top: 2px; }
+
+/* Нижняя панель с кнопкой */
+.bottom-bar {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+}
+
+.bottom-note {
+  margin: 0;
+  width: 100%;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Кнопки */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: var(--radius-s);
+  font-family: var(--font-tight);
+  font-size: 14px;
+  line-height: 1.6;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btn--filled {
+  width: 100%;
+  background: var(--accent);
+}
+
+.btn--filled:disabled {
+  background: var(--accent-disabled);
+  cursor: default;
+}
+
+.btn--danger { background: var(--error); }
+
+.btn--outlined {
+  background: #fff;
+  border: 1px solid var(--border);
+  color: var(--text-contrast);
+}
+
+/* Диалог */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.dialog {
+  position: absolute;
+  top: 246px;
+  left: 24px;
+  right: 24px;
+  max-width: 560px;
+  min-width: 280px;
+  background: var(--bg);
+  border-radius: var(--radius-l);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+  z-index: 11;
+}
+
+.dialog-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px 16px 0;
+}
+
+.dialog-title {
+  margin: 0;
+  flex: 1 0 0;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.4;
+}
+
+.dialog-desc {
+  margin: 0;
+  padding: 16px 16px 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-sec);
+}
+
+.dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 24px 16px;
+}

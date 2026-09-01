@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Чатботоапп — прототип</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="phone" id="phone">
+
+    <!-- Экран 1: логин -->
+    <section class="screen" id="screen-login">
+      <img class="status-bar" src="assets/status-bar.svg" alt="" width="360" height="24" />
+      <div class="app-bar app-bar--empty" data-node-id="1:1758"></div>
+
+      <header class="page-item">
+        <h1 class="screen-title screen-title--ok">ЧАТБОТОАПП</h1>
+      </header>
+
+      <button class="row row--tap" id="account-item" type="button">
+        <div class="row-texts">
+          <span class="row-title">Default</span>
+          <span class="row-sub">lizhnayatvar1@tempadgmail.com</span>
+        </div>
+        <img class="row-icon" src="assets/arrow-right.svg" alt="" width="24" height="24" />
+      </button>
+
+      <div class="bottom-bar">
+        <p class="bottom-note">Залогинься чтобы юзать больше чатботов!</p>
+        <button class="btn btn--filled" id="login-btn" type="button">Залогиниться</button>
+      </div>
+    </section>
+
+    <!-- Экран 2: список чатботов -->
+    <section class="screen" id="screen-list" hidden>
+      <img class="status-bar" src="assets/status-bar.svg" alt="" width="360" height="24" />
+      <div class="app-bar" data-node-id="1:1043">
+        <button class="icon-btn" id="back-btn" type="button" aria-label="Назад">
+          <img src="assets/close.svg" alt="" width="24" height="24" />
+        </button>
+      </div>
+
+      <header class="page-item">
+        <h1 class="screen-title" id="list-title"></h1>
+        <p class="screen-sub" id="list-sub"></p>
+      </header>
+
+      <div id="groups"></div>
+
+      <div class="bottom-bar">
+        <button class="btn btn--filled" id="continue-btn" type="button">Continue</button>
+      </div>
+    </section>
+
+    <!-- Диалог удаления -->
+    <div class="scrim" id="dialog" hidden>
+      <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+        <div class="dialog-head">
+          <h2 class="dialog-title" id="dialog-title">Удалить чатбота?</h2>
+          <button class="icon-btn" id="dialog-x" type="button" aria-label="Закрыть">
+            <img src="assets/dialog-close.svg" alt="" width="24" height="24" />
+          </button>
+        </div>
+        <p class="dialog-desc">Вся переписка с ним канет в лету, выбирай с умом</p>
+        <div class="dialog-actions">
+          <button class="btn btn--danger" id="dialog-delete" type="button">Delete</button>
+          <button class="btn btn--outlined" id="dialog-cancel" type="button">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
