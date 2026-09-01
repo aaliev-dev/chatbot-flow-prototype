@@ -133,7 +133,7 @@ body {
   flex-shrink: 0;
 }
 
-/* Подпись под device-чатботом: прикрепится к аккаунту */
+/* Подпись под device-чатом: прикрепится к аккаунту */
 .attach-note {
   margin: 0;
   padding: 4px 16px 8px;
@@ -142,7 +142,7 @@ body {
   color: var(--text-sec);
 }
 
-/* Строка чатбота */
+/* Строка чата */
 .row {
   display: flex;
   align-items: flex-start;
