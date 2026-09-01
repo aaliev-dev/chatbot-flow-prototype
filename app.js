@@ -1,4 +1,4 @@
-// Прототип флоу: логин → список чатботов (лимит 5) → удаление через диалог → Continue
+// Прототип флоу: логин → список чатов (лимит 5) → удаление через диалог → Continue
 "use strict";
 
 const FORM_URL =
@@ -17,7 +17,7 @@ const INITIAL_CHATBOTS = [
 
 const state = {
   chatbots: INITIAL_CHATBOTS.map((c) => ({ ...c })),
-  pendingDelete: null, // id чатбота, по корзинке которого открыли диалог
+  pendingDelete: null, // id чата, по корзинке которого открыли диалог
 };
 
 const els = {
@@ -60,13 +60,13 @@ function renderHeader() {
   const over = count > LIMIT;
 
   els.title.textContent = over
-    ? `Слишком много чатботов: ${count} of ${LIMIT}`
-    : `Все ок по количеству чатботов: ${count} of ${LIMIT}`;
+    ? `Слишком много чатов: ${count} of ${LIMIT}`
+    : `Все ок по количеству чатов: ${count} of ${LIMIT}`;
   els.title.classList.toggle("screen-title--error", over);
   els.title.classList.toggle("screen-title--ok", !over);
 
   els.sub.textContent = over
-    ? "Всего может быть 5 чатботов. Удали какой-нибудь чтобы продолжить"
+    ? "Всего может быть 5 чатов. Удали какой-нибудь чтобы продолжить"
     : "You meet your limit of 5 inboxes. Continue to AdGuard Mail";
 
   els.continueBtn.disabled = over;
@@ -122,12 +122,12 @@ function renderList() {
   const account = state.chatbots.filter((c) => c.group === "account");
   // Подпись про прикрепление к аккаунту — только когда лимит соблюдён
   const note = state.chatbots.length <= LIMIT
-    ? "Этот чатбот прикрепится к твоему аккаунту после входа"
+    ? "Этот чат прикрепится к твоему аккаунту после входа"
     : null;
 
   const nodes = [
-    groupEl("Чатбот созданный на этом устройстве", device, note),
-    groupEl("Чатботы прикрепленные к аккаунту", account),
+    groupEl("Чат созданный на этом устройстве", device, note),
+    groupEl("Чаты прикрепленные к аккаунту", account),
   ].filter(Boolean);
 
   els.groups.replaceChildren(...nodes);
@@ -154,7 +154,7 @@ function closeDialog() {
 /* ---------- События ---------- */
 
 els.loginBtn.addEventListener("click", () => {
-  // Демо-сценарий всегда начинается с оверлимита: сбрасываем список к 6 чатботам
+  // Демо-сценарий всегда начинается с оверлимита: сбрасываем список к 6 чатам
   state.chatbots = INITIAL_CHATBOTS.map((c) => ({ ...c }));
   render();
   showScreen("list");
