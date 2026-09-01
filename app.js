@@ -154,10 +154,30 @@ els.groups.addEventListener("click", (e) => {
 
 els.dialogDelete.addEventListener("click", () => {
   if (state.pendingDelete === null) return;
-  state.chatbots = state.chatbots.filter((c) => c.id !== state.pendingDelete);
+  const id = state.pendingDelete;
+  state.chatbots = state.chatbots.filter((c) => c.id !== id);
   closeDialog();
-  render();
+  animateRowRemoval(id, render);
 });
+
+// Строка схлопывается анимированно, после чего обновляем заголовок/список
+function animateRowRemoval(id, done) {
+  const trashBtn = els.groups.querySelector(`.row-trash[data-id="${CSS.escape(id)}"]`);
+  const row = trashBtn && trashBtn.closest(".row");
+  if (!row) {
+    done();
+    return;
+  }
+  row.classList.add("row--removing");
+  let finished = false;
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+    done();
+  };
+  row.addEventListener("transitionend", finish, { once: true });
+  setTimeout(finish, 400); // страховка, если transitionend не сработает
+}
 
 els.dialogCancel.addEventListener("click", closeDialog);
 els.dialogX.addEventListener("click", closeDialog);
