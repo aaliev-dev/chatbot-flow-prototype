@@ -15,7 +15,7 @@
   --font-tight: "Inter Tight", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
   --phone-w: 360px;
-  --phone-h: 800px;
+  --phone-h: 700px;
 }
 
 * { box-sizing: border-box; }
