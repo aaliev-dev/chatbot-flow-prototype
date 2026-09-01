@@ -226,11 +226,8 @@ body {
 
 .row-trash { margin-left: 4px; padding-top: 2px; }
 
-/* Нижняя панель с кнопкой — прилипает к низу экрана поверх скролла */
+/* Нижняя панель: экран логина — в потоке flex-колонки */
 .bottom-bar {
-  position: sticky;
-  bottom: 0;
-  z-index: 5;
   margin-top: auto;
   display: flex;
   flex-direction: column;
@@ -240,6 +237,21 @@ body {
   border-top: 1px solid var(--border);
   background: var(--bg);
   flex-shrink: 0;
+}
+
+/* Экран списка: закреплена поверх всего независимо от скролла */
+.bottom-bar--pinned {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  box-shadow: 0 -6px 16px rgba(39, 47, 58, 0.08);
+}
+
+/* Контент экрана списка не заезжает под закреплённую панель */
+#screen-list {
+  padding-bottom: 104px;
 }
 
 .bottom-note {

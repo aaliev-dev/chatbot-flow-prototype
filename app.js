@@ -35,6 +35,7 @@ const els = {
   dialogDelete: document.getElementById("dialog-delete"),
   dialogCancel: document.getElementById("dialog-cancel"),
   dialogX: document.getElementById("dialog-x"),
+  listBottomBar: document.getElementById("list-bottom-bar"),
 };
 
 /* ---------- Рендер ---------- */
@@ -43,6 +44,7 @@ function showScreen(name) {
   for (const [key, el] of Object.entries(els.screens)) {
     el.hidden = key !== name;
   }
+  els.listBottomBar.hidden = name !== "list";
 }
 
 function escapeHtml(str) {
@@ -175,7 +177,7 @@ els.dialogDelete.addEventListener("click", () => {
   animateRowRemoval(id, render);
 });
 
-// Строка схлопывается, остальные элементы (FLIP) плавно съезжают на её место,
+// Строка плавно схлопывается (max-height transition сам ведёт соседей),
 // после чего обновляем заголовок и пересобираем список
 function animateRowRemoval(id, done) {
   const trashBtn = els.groups.querySelector(`.row-trash[data-id="${CSS.escape(id)}"]`);
@@ -184,31 +186,7 @@ function animateRowRemoval(id, done) {
     done();
     return;
   }
-
-  const children = Array.from(els.groups.children);
-  const index = children.indexOf(row);
-  const shift = row.getBoundingClientRect().height;
-
-  // 1. Замораживаем то, что ниже удаляемого: сдвигаем вниз на высоту строки
-  children.forEach((el, i) => {
-    if (i <= index) return;
-    el.style.transition = "none";
-    el.style.transform = `translateY(${shift}px)`;
-  });
-
-  // 2. Начинаем схлопывание строки
   row.classList.add("row--removing");
-  void els.groups.offsetHeight; // фиксируем layout до следующего кадра
-
-  // 3. Отпускаем: строки плавно съезжают вверх синхронно со схлопыванием
-  requestAnimationFrame(() => {
-    children.forEach((el, i) => {
-      if (i <= index) return;
-      el.style.transition = "";
-      el.style.transform = "";
-    });
-  });
-
   let finished = false;
   const finish = () => {
     if (finished) return;
