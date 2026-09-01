@@ -104,9 +104,13 @@ function groupEl(label, bots, note) {
 function renderList() {
   const device = state.chatbots.filter((c) => c.group === "device");
   const account = state.chatbots.filter((c) => c.group === "account");
+  // Подпись про прикрепление к аккаунту — только когда лимит соблюдён
+  const note = state.chatbots.length <= LIMIT
+    ? "Этот чатбот прикрепится к твоему аккаунту после входа"
+    : null;
 
   const nodes = [
-    groupEl("Чатбот созданный на этом устройстве", device, "Этот чатбот прикрепится к твоему аккаунту после входа"),
+    groupEl("Чатбот созданный на этом устройстве", device, note),
     groupEl("Чатботы прикрепленные к аккаунту", account),
   ].filter(Boolean);
 
