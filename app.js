@@ -69,6 +69,20 @@ function renderHeader() {
   els.continueBtn.disabled = over;
 }
 
+// Плавная смена заголовка/подписи (перезапуск fade-анимации при изменении)
+let lastHeaderKey = null;
+
+function animateHeaderSwap() {
+  const key = `${els.title.textContent}|${els.sub.textContent}`;
+  if (key === lastHeaderKey) return;
+  lastHeaderKey = key;
+  for (const el of [els.title, els.sub]) {
+    el.classList.remove("header-swap");
+    void el.offsetWidth; // рестарт CSS-анимации
+    el.classList.add("header-swap");
+  }
+}
+
 function rowEl(bot, isFirst) {
   const row = document.createElement("div");
   row.className = "row" + (isFirst ? "" : " row--lined");
@@ -119,6 +133,7 @@ function renderList() {
 
 function render() {
   renderHeader();
+  animateHeaderSwap();
   renderList();
 }
 
@@ -160,7 +175,8 @@ els.dialogDelete.addEventListener("click", () => {
   animateRowRemoval(id, render);
 });
 
-// Строка схлопывается анимированно, после чего обновляем заголовок/список
+// Строка схлопывается, остальные элементы (FLIP) плавно съезжают на её место,
+// после чего обновляем заголовок и пересобираем список
 function animateRowRemoval(id, done) {
   const trashBtn = els.groups.querySelector(`.row-trash[data-id="${CSS.escape(id)}"]`);
   const row = trashBtn && trashBtn.closest(".row");
@@ -168,14 +184,40 @@ function animateRowRemoval(id, done) {
     done();
     return;
   }
+
+  const children = Array.from(els.groups.children);
+  const index = children.indexOf(row);
+  const shift = row.getBoundingClientRect().height;
+
+  // 1. Замораживаем то, что ниже удаляемого: сдвигаем вниз на высоту строки
+  children.forEach((el, i) => {
+    if (i <= index) return;
+    el.style.transition = "none";
+    el.style.transform = `translateY(${shift}px)`;
+  });
+
+  // 2. Начинаем схлопывание строки
   row.classList.add("row--removing");
+  void els.groups.offsetHeight; // фиксируем layout до следующего кадра
+
+  // 3. Отпускаем: строки плавно съезжают вверх синхронно со схлопыванием
+  requestAnimationFrame(() => {
+    children.forEach((el, i) => {
+      if (i <= index) return;
+      el.style.transition = "";
+      el.style.transform = "";
+    });
+  });
+
   let finished = false;
   const finish = () => {
     if (finished) return;
     finished = true;
     done();
   };
-  row.addEventListener("transitionend", finish, { once: true });
+  row.addEventListener("transitionend", (e) => {
+    if (e.target === row && e.propertyName === "max-height") finish();
+  });
   setTimeout(finish, 400); // страховка, если transitionend не сработает
 }
 
