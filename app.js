@@ -84,7 +84,7 @@ function rowEl(bot, isFirst) {
   return row;
 }
 
-function groupEl(label, bots) {
+function groupEl(label, bots, note) {
   if (!bots.length) return null;
   const frag = document.createDocumentFragment();
   const labelEl = document.createElement("p");
@@ -92,6 +92,12 @@ function groupEl(label, bots) {
   labelEl.textContent = label;
   frag.append(labelEl);
   bots.forEach((bot, i) => frag.append(rowEl(bot, i === 0)));
+  if (note) {
+    const noteEl = document.createElement("p");
+    noteEl.className = "attach-note";
+    noteEl.textContent = note;
+    frag.append(noteEl);
+  }
   return frag;
 }
 
@@ -100,7 +106,7 @@ function renderList() {
   const account = state.chatbots.filter((c) => c.group === "account");
 
   const nodes = [
-    groupEl("Чатбот созданный на этом устройстве", device),
+    groupEl("Чатбот созданный на этом устройстве", device, "Этот чатбот прикрепится к твоему аккаунту после входа"),
     groupEl("Чатботы прикрепленные к аккаунту", account),
   ].filter(Boolean);
 

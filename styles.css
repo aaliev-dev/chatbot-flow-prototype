@@ -125,6 +125,15 @@ body {
   flex-shrink: 0;
 }
 
+/* Подпись под device-чатботом: прикрепится к аккаунту */
+.attach-note {
+  margin: 0;
+  padding: 4px 16px 8px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-sec);
+}
+
 /* Строка чатбота */
 .row {
   display: flex;
