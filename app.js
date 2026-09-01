@@ -45,6 +45,7 @@ function showScreen(name) {
     el.hidden = key !== name;
   }
   els.listBottomBar.hidden = name !== "list";
+  els.screens.list.scrollTop = 0; // мгновенный сброс при смене экрана
 }
 
 function escapeHtml(str) {
@@ -76,7 +77,6 @@ let lastHeaderKey = null;
 
 function animateHeaderSwap() {
   const key = `${els.title.textContent}|${els.sub.textContent}`;
-  if (key === lastHeaderKey) return;
   lastHeaderKey = key;
   for (const el of [els.title, els.sub]) {
     el.classList.remove("header-swap");
@@ -174,6 +174,8 @@ els.dialogDelete.addEventListener("click", () => {
   const id = state.pendingDelete;
   state.chatbots = state.chatbots.filter((c) => c.id !== id);
   closeDialog();
+  // Плавный скролл наверх стартует одновременно со схлопыванием строки
+  els.screens.list.scrollTo({ top: 0, behavior: "smooth" });
   animateRowRemoval(id, render);
 });
 
@@ -220,7 +222,7 @@ els.continueBtn.addEventListener("click", () => {
 /* ---------- Масштаб «телефона» под вьюпорт ---------- */
 
 function fitPhone() {
-  const scale = Math.min(1, window.innerWidth / 380, window.innerHeight / 820);
+  const scale = Math.min(1, window.innerWidth / 380, window.innerHeight / 720);
   document.querySelector(".phone").style.setProperty("--s", scale.toFixed(4));
 }
 
