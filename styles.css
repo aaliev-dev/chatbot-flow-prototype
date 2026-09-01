@@ -104,6 +104,7 @@ body {
   font-size: 24px;
   line-height: 1.4;
   overflow-wrap: break-word;
+  transition: color 0.3s ease;
 }
 
 .screen-title--error { color: var(--error); }
@@ -113,6 +114,13 @@ body {
   margin: 0;
   font-size: 14px;
   line-height: 1.6;
+  color: var(--text);
+  transition: color 0.3s ease;
+}
+
+/* Плавная смена заголовка/подписи при пересчёте лимита */
+.header-swap {
+  animation: fade-in 0.3s ease;
 }
 
 /* Подпись секции */
@@ -151,7 +159,8 @@ body {
     max-height 0.3s ease,
     opacity 0.25s ease,
     padding 0.3s ease,
-    border-top-width 0.3s ease;
+    border-top-width 0.3s ease,
+    transform 0.3s ease;
 }
 
 /* Анимация удаления строки */
@@ -161,6 +170,28 @@ body {
   padding-top: 0;
   padding-bottom: 0;
   border-top-width: 0;
+}
+
+/* FLIP-сдвиг для подписей при пересборке списка */
+.section-label,
+.attach-note {
+  transition: transform 0.3s ease;
+}
+
+/* Появление подписи (и любых новых блоков списка) */
+.fade-in {
+  animation: fade-in 0.3s ease;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .row--lined { border-top: 1px solid var(--divider); }
@@ -195,7 +226,7 @@ body {
 
 .row-trash { margin-left: 4px; padding-top: 2px; }
 
-/* Нижняя панель с кнопкой */
+/* Нижняя панель: экран логина — в потоке flex-колонки */
 .bottom-bar {
   margin-top: auto;
   display: flex;
@@ -206,6 +237,21 @@ body {
   border-top: 1px solid var(--border);
   background: var(--bg);
   flex-shrink: 0;
+}
+
+/* Экран списка: закреплена поверх всего независимо от скролла */
+.bottom-bar--pinned {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  box-shadow: 0 -6px 16px rgba(39, 47, 58, 0.08);
+}
+
+/* Контент экрана списка не заезжает под закреплённую панель */
+#screen-list {
+  padding-bottom: 104px;
 }
 
 .bottom-note {
@@ -235,6 +281,7 @@ body {
 .btn--filled {
   width: 100%;
   background: var(--accent);
+  transition: background-color 0.3s ease;
 }
 
 .btn--filled:disabled {

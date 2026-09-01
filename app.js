@@ -35,6 +35,7 @@ const els = {
   dialogDelete: document.getElementById("dialog-delete"),
   dialogCancel: document.getElementById("dialog-cancel"),
   dialogX: document.getElementById("dialog-x"),
+  listBottomBar: document.getElementById("list-bottom-bar"),
 };
 
 /* ---------- Рендер ---------- */
@@ -43,6 +44,7 @@ function showScreen(name) {
   for (const [key, el] of Object.entries(els.screens)) {
     el.hidden = key !== name;
   }
+  els.listBottomBar.hidden = name !== "list";
 }
 
 function escapeHtml(str) {
@@ -67,6 +69,20 @@ function renderHeader() {
     : "You meet your limit of 5 inboxes. Continue to AdGuard Mail";
 
   els.continueBtn.disabled = over;
+}
+
+// Плавная смена заголовка/подписи (перезапуск fade-анимации при изменении)
+let lastHeaderKey = null;
+
+function animateHeaderSwap() {
+  const key = `${els.title.textContent}|${els.sub.textContent}`;
+  if (key === lastHeaderKey) return;
+  lastHeaderKey = key;
+  for (const el of [els.title, els.sub]) {
+    el.classList.remove("header-swap");
+    void el.offsetWidth; // рестарт CSS-анимации
+    el.classList.add("header-swap");
+  }
 }
 
 function rowEl(bot, isFirst) {
@@ -119,6 +135,7 @@ function renderList() {
 
 function render() {
   renderHeader();
+  animateHeaderSwap();
   renderList();
 }
 
@@ -160,7 +177,8 @@ els.dialogDelete.addEventListener("click", () => {
   animateRowRemoval(id, render);
 });
 
-// Строка схлопывается анимированно, после чего обновляем заголовок/список
+// Строка плавно схлопывается (max-height transition сам ведёт соседей),
+// после чего обновляем заголовок и пересобираем список
 function animateRowRemoval(id, done) {
   const trashBtn = els.groups.querySelector(`.row-trash[data-id="${CSS.escape(id)}"]`);
   const row = trashBtn && trashBtn.closest(".row");
@@ -175,7 +193,9 @@ function animateRowRemoval(id, done) {
     finished = true;
     done();
   };
-  row.addEventListener("transitionend", finish, { once: true });
+  row.addEventListener("transitionend", (e) => {
+    if (e.target === row && e.propertyName === "max-height") finish();
+  });
   setTimeout(finish, 400); // страховка, если transitionend не сработает
 }
 
